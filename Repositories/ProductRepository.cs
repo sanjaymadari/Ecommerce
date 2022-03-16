@@ -11,7 +11,7 @@ public interface IProductRepository
     Task<List<Product>> GetList();
     Task<Product> GetById(long Id);
     Task<Product> Create(Product Data);
-    Task<Product> Update(Product Data);
+    Task<bool> Update(Product Data);
     Task<List<Product>> GetProductForOrder(long OrderId);
 }
 public class ProductRepository : BaseRepository, IProductRepository
@@ -53,8 +53,10 @@ public class ProductRepository : BaseRepository, IProductRepository
             return (await con.QueryAsync<Product>(query, new { OrderId })).AsList();
     }
 
-    public Task<Product> Update(Product Data)
+    public async Task<bool> Update(Product Data)
     {
-        throw new NotImplementedException();
+        var query = $@"UPDATE ""{TableNames.customer}"" SET price = @Price WHERE id = @Id;";
+        using (var con = NewConnection)
+            return (await con.ExecuteAsync(query,Data)) == 1;
     }
 }

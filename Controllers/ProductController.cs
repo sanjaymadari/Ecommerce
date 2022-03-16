@@ -54,9 +54,21 @@ public class ProductController : ControllerBase
 
 
     [HttpPut("{id}")]
-    public Task<ProductDTO> Update([FromRoute] long id, [FromBody] Product Data)
+    public async Task<ActionResult<ProductDTO>> Update([FromRoute] long id, [FromBody] ProductUpdateDTO Data)
     {
-        return null;
+        var existing = await _product.GetById(id);
+        if (existing is null)
+            return NotFound("No product found with given user id");
+        
+        var toUpdateUser = existing with
+        {
+            Price = Data.Price,
+        };
+        var didUpdate = await _product.Update(toUpdateUser);
+        if (!didUpdate)
+            return StatusCode(StatusCodes.Status500InternalServerError, "Could not update user");
+
+         return NoContent();
     }
 
 }

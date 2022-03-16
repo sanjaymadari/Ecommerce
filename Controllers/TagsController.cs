@@ -50,12 +50,5 @@ public class TagsController : ControllerBase
         return StatusCode(StatusCodes.Status201Created, createdTags);
     }
 
-
-    [HttpPut("{id}")]
-    public Task<TagsDTO> Update([FromRoute] long id, [FromBody] Tags Data)
-    {
-        return null;
-    }
-
 }
 

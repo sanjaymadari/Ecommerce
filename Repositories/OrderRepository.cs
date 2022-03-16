@@ -14,6 +14,7 @@ public interface IOrderRepository
     Task<Order> Create(Order Data);
     Task<Order> Update(Order Data);
     Task<List<Order>> GetOrderForCustomer(long CustomerId);
+    Task Delete(long Id);
 }
 public class OrderRepository : BaseRepository, IOrderRepository
 {
@@ -29,6 +30,13 @@ public class OrderRepository : BaseRepository, IOrderRepository
         
         using (var con = NewConnection)
             return await con.QuerySingleOrDefaultAsync<Order>(query, Data);
+    }
+
+    public async Task Delete(long Id)
+    {
+        var query = $@"DELETE FROM ""{TableNames.orders}"" WHERE id = @Id;";
+        using (var con = NewConnection)
+            await con.ExecuteAsync(query, new { Id });
     }
 
     public async Task<Order> GetById(long Id)

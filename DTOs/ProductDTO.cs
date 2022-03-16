@@ -29,3 +29,10 @@ public record ProductCreateDTO
     [JsonPropertyName("price")]
     public decimal Price { get; set; }
 }
+
+public record ProductUpdateDTO
+{
+
+    [JsonPropertyName("price")]
+    public decimal Price { get; set; }
+}

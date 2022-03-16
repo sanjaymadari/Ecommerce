@@ -54,16 +54,15 @@ public class OrderController : ControllerBase
     }
 
 
-    [HttpPut("{id}")]
-    public Task<OrderDTO> Update([FromRoute] long id, [FromBody] Order Data)
-    {
-        return null;
-    }
 
     [HttpDelete("{id}")]
-    public Task Delete(long id)
+    public async Task<ActionResult> Delete(long id)
     {
-        return null;
+        var existing = await _order.GetById(id);
+        if(existing == null)
+            return NotFound("No order fount with given id");
+        await _order.Delete(id);
+        return NoContent();
     }
 
 }
